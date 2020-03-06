@@ -8,27 +8,46 @@ import { LoginAsync } from "../@Core/Services/UserService";
 
 export default function LoginScreen({ navigation }) {
 
-    const { user, setUser }: { user: UserResponse, setUser: Function } = React.useContext(Context);
+    const { state, setUser }: { state: UserResponse, setUser: Function } = React.useContext(Context);
     const [isLoading, setIsLoading] = React.useState(false);
     const [login, setLogin] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = React.useState(null);
 
-    if (user === undefined) {
+    if (state === undefined) {
         AsyncStorage.getItem('user').then(x => setUser(x));
     }
 
+    React.useEffect(() => {
+        if (state && state["user-token"]) {
+            navigation.replace('Transactions');
+        }
+    }, []);
+
+
+
+    const fakeloginUser = () => {
+        const user: UserResponse = {
+            name: 'Atacan',
+            email: 'atacan.celikkol@hotmail.com',
+            "user-token": 'qweqwejqwje234234n2432mk32'
+        }
+        setUser(user);
+        setErrorMessage(null);
+        navigation.replace('Transactions');
+        setIsLoading(false);
+    }
+
     const loginUser = () => {
-        LoginAsync({ login, password })
-            .then(x => {
-                x.message && setErrorMessage(x.message);
-                if (x['user-token']) {
-                    setUser(x);
-                    setErrorMessage(null);
-                    navigation.replace('Transactions');
-                };
-                setIsLoading(false);
-            });
+        LoginAsync({ login, password }).then(x => {
+            x.message && setErrorMessage(x.message);
+            if (x['user-token']) {
+                setUser(x);
+                setErrorMessage(null);
+                navigation.replace('Transactions');
+            };
+            setIsLoading(false);
+        });
     }
 
     return <View style={styles.container}>
@@ -37,6 +56,9 @@ export default function LoginScreen({ navigation }) {
             leftIcon={{ type: 'evilicon', name: 'envelope' }}
             onChangeText={x => setLogin(x)}
             disabled={isLoading}
+            textContentType="emailAddress"
+            keyboardType="email-address"
+            autoCompleteType="email"
         />
         <Input
             placeholder='Password'
@@ -45,15 +67,14 @@ export default function LoginScreen({ navigation }) {
             secureTextEntry={true}
             disabled={isLoading}
             errorMessage={errorMessage}
-
         />
-        <Button title="Login" onPress={() => { setIsLoading(true); loginUser() }} disabled={isLoading} loading={isLoading} />
+        <Button title="Login" onPress={() => { setIsLoading(true); fakeloginUser() }} disabled={isLoading} loading={isLoading} />
     </View>
 }
 
 export const navigationOptions = ({ navigation }): StackNavigationOptions => {
     return {
-        headerShown: false,
+        headerShown: false
     };
 };
 

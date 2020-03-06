@@ -1,14 +1,14 @@
 import createDataContext from "../Helpers/CreateDataContext";
 import { UserResponse } from '../Models/User';
 
-function userReducer(user: UserResponse, action: { type: string, payload: any; callback: Function }) {
+function userReducer(state: UserResponse, action: { type: string, payload: any; callback: Function }) {
    switch (action.type) {
 
       case 'setUser':
          return action.payload;
 
       default:
-         return user;
+         return state;
    }
 };
 
@@ -18,5 +18,5 @@ function setUser(dispatch) {
    }
 }
 
-export const { Context, Provider } = createDataContext(userReducer, { setUser }, undefined);
+export const { Context, Provider } = createDataContext(userReducer, { setUser }, null);
 
