@@ -1,9 +1,10 @@
 import moment from "moment";
 
 export interface TransactionResponse {
+    objectId: string;
     amount: number;
     description: string;
-    on_date: string;
+    on_date: number;
 }
 
 export class TransactionRequest {

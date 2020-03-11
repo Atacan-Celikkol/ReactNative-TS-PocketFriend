@@ -1,8 +1,9 @@
-import DateRange from '../models/DateRange';
+import DateRange from '../Models/DateRange';
+import { TransactionResponse } from '../Models/Transaction';
 import { FetchAsync, getApiUrl, getApiUrlById, getApiUrlSimple, sortTypes } from './ApiService';
 
 const tableName = 'Incomes';
-export async function GetIncomesAsync(dateRange = new DateRange(), sortBy, sortType = sortTypes.Ascending) {
+export async function GetIncomesAsync(dateRange = new DateRange(), sortBy, sortType = sortTypes.Ascending): Promise<TransactionResponse[]> {
     const url = getApiUrl(tableName, dateRange, sortBy, sortType);
     return await FetchAsync(url, 'get');
 }

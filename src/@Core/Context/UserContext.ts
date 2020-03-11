@@ -1,3 +1,4 @@
+import { AsyncStorage } from "react-native";
 import createDataContext from "../Helpers/CreateDataContext";
 import { UserResponse } from '../Models/User';
 
@@ -5,6 +6,8 @@ function userReducer(state: UserResponse, action: { type: string, payload: any; 
    switch (action.type) {
 
       case 'setUser':
+         AsyncStorage.setItem('user-token', JSON.stringify(action.payload['user-token']));
+         AsyncStorage.setItem('user', JSON.stringify(action.payload));
          return action.payload;
 
       default:

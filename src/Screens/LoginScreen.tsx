@@ -10,8 +10,8 @@ export default function LoginScreen({ navigation }) {
 
     const { state, setUser }: { state: UserResponse, setUser: Function } = React.useContext(Context);
     const [isLoading, setIsLoading] = React.useState(false);
-    const [login, setLogin] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [login, setLogin] = React.useState('atacan.celikkol@hotmail.com');
+    const [password, setPassword] = React.useState('123456');
     const [errorMessage, setErrorMessage] = React.useState(null);
 
     if (state === undefined) {
@@ -23,7 +23,6 @@ export default function LoginScreen({ navigation }) {
             navigation.replace('Transactions');
         }
     }, []);
-
 
 
     const fakeloginUser = () => {
@@ -38,7 +37,7 @@ export default function LoginScreen({ navigation }) {
         setIsLoading(false);
     }
 
-    const loginUser = () => {
+    const loginUser = async () => {
         LoginAsync({ login, password }).then(x => {
             x.message && setErrorMessage(x.message);
             if (x['user-token']) {
@@ -68,7 +67,7 @@ export default function LoginScreen({ navigation }) {
             disabled={isLoading}
             errorMessage={errorMessage}
         />
-        <Button title="Login" onPress={() => { setIsLoading(true); fakeloginUser() }} disabled={isLoading} loading={isLoading} />
+        <Button title="Login" onPress={() => { setIsLoading(true); loginUser() }} disabled={isLoading} loading={isLoading} />
     </View>
 }
 
