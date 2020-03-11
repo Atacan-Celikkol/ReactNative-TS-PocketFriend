@@ -1,6 +1,6 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-elements";
 import { Context } from '../@Core/Context/UserContext';
 import { TransactionResponse } from '../@Core/Models/Transaction';
@@ -27,7 +27,7 @@ export default function TransactionsScreen({ navigation }) {
     const getTransactions = (dates) => {
         const dateItems = { startDate: new Date(dates.startDate).getTime(), endDate: new Date(dates.endDate).getTime() }
 
-        getIncomesAsync(dateItems);
+        // getIncomesAsync(dateItems);
         getExpensesAsync(dateItems);
     }
 
@@ -51,8 +51,8 @@ export default function TransactionsScreen({ navigation }) {
         GetExpensesAsync(dates, 'on_date desc,created desc', '').then(x => {
             console.log('GetExpensesMiddle', new Date().toLocaleTimeString());
             setExpenses(x);
-            setExpensesLoading(false);
         }).then(x => {
+            setExpensesLoading(false);
             console.log('GetExpensesEnd', new Date().toLocaleTimeString());
         });
     }
@@ -63,7 +63,7 @@ export default function TransactionsScreen({ navigation }) {
 
     return <View style={styles.mainContainer}>
         {/* <TestComponent navigation={navigation} /> */}
-        <ScrollView style={styles.innerContainer}>
+        <View style={styles.innerContainer}>
             <View style={styles.incomesContainer}>
                 <Text style={styles.incomesTitle}>Incomes</Text>
                 {
@@ -75,19 +75,20 @@ export default function TransactionsScreen({ navigation }) {
                     }) : null
                 }
             </View>
-        </ScrollView>
-        <View style={styles.expensesContainer}>
-            <Text style={styles.expensesTitle}>Expenses</Text>
-            {
-                expensesLoading && <ActivityIndicator size={40} color='#f33' style={{ flex: 1 }} />
-            }
-            {
-                !expensesLoading ? <FlatList
-                    data={expenses}
-                    keyExtractor={x => x.objectId}
-                    renderItem={({ item, index }) => <TransactionListItem transaction={item} onDelete={(id: string) => { }} onEdit={(id: string) => { }} />}
-                /> : null
-            }
+            <View style={styles.expensesContainer}>
+                <Text style={styles.expensesTitle}>Expenses</Text>
+
+                {
+                    expensesLoading && <ActivityIndicator size={40} color='#f33' style={{ flex: 1 }} />
+                }
+                {
+                    !expensesLoading && expenses.length > 0 ? <FlatList
+                        data={expenses}
+                        keyExtractor={x => x.objectId}
+                        renderItem={({ item, index }) => <TransactionListItem transaction={item} onDelete={(id: string) => { }} onEdit={(id: string) => { }} />}
+                    /> : null
+                }
+            </View>
         </View>
     </View>
 }
