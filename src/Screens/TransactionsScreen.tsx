@@ -11,7 +11,7 @@ import TransactionListItem from '../Components/TransactionListItem';
 
 export default function TransactionsScreen({ navigation }) {
 
-    const { state, setUser }: { state: UserResponse, setUser: Function } = React.useContext(Context);
+    const { state, setUser }: { state: UserResponse, setUser: Function; } = React.useContext(Context);
 
     const [incomes, setIncomes]: [TransactionResponse[], (incomes: TransactionResponse[]) => void] = React.useState(null);
     const [incomesLoading, setIncomesLoading]: [boolean, Function] = React.useState(true);
@@ -25,11 +25,11 @@ export default function TransactionsScreen({ navigation }) {
     }
 
     const getTransactions = (dates) => {
-        const dateItems = { startDate: new Date(dates.startDate).getTime(), endDate: new Date(dates.endDate).getTime() }
+        const dateItems = { startDate: new Date(dates.startDate).getTime(), endDate: new Date(dates.endDate).getTime() };
 
-        // getIncomesAsync(dateItems);
+        getIncomesAsync(dateItems);
         getExpensesAsync(dateItems);
-    }
+    };
 
     const getIncomesAsync = async (dates) => {
         setIncomes([]);
@@ -37,10 +37,10 @@ export default function TransactionsScreen({ navigation }) {
         setIncomesTotal(0);
 
         GetIncomesAsync(dates, 'on_date desc,created desc', '').then(x => {
-            setIncomes(x);
+            //setIncomes(x);
             setIncomesLoading(false);
         });
-    }
+    };
 
     const getExpensesAsync = async (dates) => {
         setExpenses([]);
@@ -55,7 +55,7 @@ export default function TransactionsScreen({ navigation }) {
             setExpensesLoading(false);
             console.log('GetExpensesEnd', new Date().toLocaleTimeString());
         });
-    }
+    };
 
     React.useEffect(() => {
         getTransactions({ startDate: '2020-02-01', endDate: '2020-03-01' });
@@ -71,7 +71,7 @@ export default function TransactionsScreen({ navigation }) {
                 }
                 {
                     !incomesLoading ? incomes.map((item, i) => {
-                        return <TransactionListItem key={i} transaction={item} onDelete={(id: string) => { }} onEdit={(id: string) => { }} />
+                        return <TransactionListItem key={i} transaction={item} onDelete={(id: string) => { }} onEdit={(id: string) => { }} />;
                     }) : null
                 }
             </View>
@@ -90,7 +90,7 @@ export default function TransactionsScreen({ navigation }) {
                 }
             </View>
         </View>
-    </View>
+    </View>;
 }
 
 export const navigationOptions = ({ navigation }): StackNavigationOptions => {
@@ -116,9 +116,9 @@ export const navigationOptions = ({ navigation }): StackNavigationOptions => {
 
 const styles = StyleSheet.create({
     mainContainer: {
+        flex: 1,
         marginHorizontal: 5,
         alignContent: 'center',
-        justifyContent: 'center'
     },
     innerContainer: {
     },
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     incomesTitle: {
         fontSize: 40,
         color: '#3a3',
+        marginBottom: 5
     },
     expensesContainer: {
         paddingHorizontal: 5,
@@ -141,14 +142,15 @@ const styles = StyleSheet.create({
     expensesTitle: {
         fontSize: 40,
         color: '#f33',
+        marginBottom: 5
     }
 });
 
 function TestComponent({ navigation }) {
 
-    const { state, setUser }: { state: UserResponse, setUser: Function } = React.useContext(Context);
+    const { state, setUser }: { state: UserResponse, setUser: Function; } = React.useContext(Context);
     return <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Button onPress={() => navigation.replace('Login')} title='Back' buttonStyle={{ backgroundColor: '#333', margin: 1 }} />
         <Button onPress={() => setUser(null)} title='Logout' buttonStyle={{ backgroundColor: '#f33e', margin: 1 }} />
-    </View>
+    </View>;
 }
